@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3분 실손 셀프 점검 | 노플맨</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+
+:root{--navy:#0B211B;--card:#163A31;--accent:#C9A227;--sub:rgba(245,241,230,.78)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--navy);color:#fff;font-family:'Pretendard Variable',Pretendard,sans-serif;display:flex;justify-content:center;padding:24px 16px}
+.np-box{width:100%;max-width:460px;background:rgba(22,58,49,.92);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.np-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.np-head b{font-size:20px;font-weight:900}
+.np-badge{padding:6px 12px;border-radius:999px;background:rgba(201,162,39,.18);color:#E3C766;font-size:13px;font-weight:700}
+.np-bar{height:6px;border-radius:99px;background:rgba(11,33,27,.7);margin:18px 0 8px;overflow:hidden}
+.np-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.np-step{font-size:13px;color:var(--sub);margin-bottom:6px}
+h2{margin:0 0 18px;font-size:21px;line-height:1.45;font-weight:700;word-break:keep-all}
+.np-opts{display:flex;flex-direction:column;gap:10px}
+.np-opt{min-height:52px;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.14);background:rgba(11,33,27,.6);color:#fff;font:500 16px 'Pretendard Variable',Pretendard,sans-serif;text-align:left;cursor:pointer}
+.np-opt:hover,.np-opt:focus-visible{border-color:var(--accent);outline:none}
+.np-back{margin-top:14px;background:none;border:0;color:var(--sub);font:500 14px 'Pretendard Variable',Pretendard,sans-serif;cursor:pointer;padding:8px 0}
+.np-res{padding:20px;border-radius:16px;background:rgba(11,33,27,.6);border:1.5px solid var(--accent);margin-bottom:18px}
+.np-res small{color:var(--accent);font-weight:900;font-size:13px;letter-spacing:1px}
+.np-res h3{word-break:keep-all;margin:6px 0 8px;font-size:21px;font-weight:900}
+.np-res p{margin:0;font-size:15px;line-height:1.65;color:var(--sub);word-break:keep-all}
+.np-res ul{word-break:keep-all;margin:10px 0 0;padding-left:18px;font-size:15px;line-height:1.6}
+label.np-l{display:block;font-size:14px;font-weight:700;margin:14px 0 6px}
+.np-in{width:100%;min-height:48px;padding:12px 14px;border-radius:12px;border:1.5px solid rgba(255,255,255,.18);background:rgba(11,33,27,.7);color:#fff;font:500 16px 'Pretendard Variable',Pretendard,sans-serif}
+.np-in:focus{border-color:var(--accent);outline:none}
+.np-agree{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:13px;line-height:1.55;color:var(--sub)}
+.np-agree input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex-shrink:0}
+details{margin-top:8px;font-size:12px;color:rgba(245,241,230,.6);line-height:1.6}
+.np-cta{width:100%;min-height:54px;margin-top:18px;border:0;border-radius:14px;background:var(--accent);color:var(--navy);font:900 17px 'Pretendard Variable',Pretendard,sans-serif;cursor:pointer}
+.np-cta:disabled{opacity:.5;cursor:default}
+.np-err{color:#E3C766;font-size:14px;margin-top:10px;min-height:20px}
+.np-hp{position:absolute;left:-9999px}
+.np-foot{margin-top:18px;font-size:12px;color:rgba(245,241,230,.6);line-height:1.6}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="np-box" id="np-root">
+  <a href="./" style="display:inline-block;margin-bottom:14px;color:rgba(245,241,230,.78);font-size:14px;text-decoration:none">← 노플맨 주영선 홈으로</a>
+  <div class="np-head"><b>3분 실손 셀프 점검</b><span class="np-badge">무료</span></div>
+
+  <!-- 질문 화면 -->
+  <section id="np-quiz">
+    <div class="np-bar"><i id="np-prog" style="width:0%"></i></div>
+    <div class="np-step" id="np-step"></div>
+    <h2 id="np-q"></h2>
+    <div class="np-opts" id="np-opts"></div>
+    <button type="button" class="np-back" id="np-back" hidden>← 이전 질문</button>
+  </section>
+
+  <!-- 결과 + 신청 화면 -->
+  <section id="np-result" hidden>
+    <div class="np-res" style="margin-top:18px">
+      <small id="np-rtag"></small>
+      <h3 id="np-rtitle"></h3>
+      <p id="np-rdesc"></p>
+      <ul id="np-rlist"></ul>
+    </div>
+    <form id="np-form" novalidate>
+      <b style="font-size:17px">노플맨에게 상세 점검 받기</b>
+      <label class="np-l" for="np-name">이름</label>
+      <input class="np-in" id="np-name" name="name" autocomplete="name" required maxlength="20">
+      <label class="np-l" for="np-phone">연락처</label>
+      <input class="np-in" id="np-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" required maxlength="13">
+      <label class="np-l" for="np-time">상담 가능 시간</label>
+      <select class="np-in" id="np-time" name="time">
+        <option>평일 오전</option><option>평일 오후</option><option>평일 저녁(18시 이후)</option><option>주말</option>
+      </select>
+      <input class="np-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="np-agree"><input type="checkbox" id="np-consent"><span>[필수] 개인정보 수집·이용에 동의합니다.</span></label>
+      <details><summary>자세히 보기</summary>
+        수집 항목: 이름, 연락처, 상담 가능 시간, 점검 응답<br>
+        이용 목적: 보험 상담 연락 및 보장 점검 안내<br>
+        보유 기간: [상담 종료 후 OO년 — 소속 회사 기준으로 수정]<br>
+        동의를 거부할 수 있으며, 거부 시 상담 신청이 제한됩니다.
+      </details>
+      <button type="submit" class="np-cta" id="np-submit">상세 점검 신청하기</button>
+      <div class="np-err" id="np-err" role="alert"></div>
+    </form>
+    <button type="button" class="np-back" id="np-retry">처음부터 다시 하기</button>
+  </section>
+
+  <!-- 완료 화면 -->
+  <section id="np-done" hidden>
+    <div class="np-res" style="margin-top:18px">
+      <small>접수 완료</small>
+      <h3>신청이 접수되었습니다</h3>
+      <p>남겨주신 시간대에 노플맨 주영선이 연락드리겠습니다. 급하신 경우 <a href="tel:01064849690" style="color:#C9A227">010-6484-9690</a>으로 전화 주세요.</p>
+    </div>
+  </section>
+
+  <div class="np-foot">본 점검은 일반적인 안내이며, 실제 보장 여부는 가입하신 약관과 보험사 심사에 따라 달라집니다.<br>[보험설계사 등록번호] · [준법감시인 심의필 번호]</div>
+</div>
+
+<script>
+// ▼ 여기에 Apps Script 웹 앱 주소(https://script.google.com/macros/s/.../exec)를 붙여넣으세요
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwIz4xdjv0dU0dSAzx-ms18spK12VtwAjAJoN7Cl9PnUNCV36VxoBNk1Jo9F3cg3ga35Q/exec';
+
+const QS = [
+  { k:'q1', q:'실손보험에 처음 가입하신 시기는 언제인가요?', o:['2009년 9월 이전','2009년 10월 ~ 2017년 3월','2017년 4월 ~ 2021년 6월','2021년 7월 이후','잘 모르겠어요'] },
+  { k:'q2', q:'회사 단체보험에도 실손(의료비) 보장이 있나요?', o:['예','아니요','잘 모르겠어요'] },
+  { k:'q3', q:'최근 3년 안에 받은 진료 중 청구하지 않은 진료비가 있나요?', o:['예','아니요','잘 모르겠어요'] },
+  { k:'q4', q:'도수치료·MRI 같은 비급여 진료를 받으시나요?', o:['자주 받아요','가끔 받아요','거의 없어요'] },
+  { k:'q5', q:'최근 실손보험료가 많이 올랐다고 느끼시나요?', o:['예','아니요','잘 모르겠어요'] },
+  { k:'q6', q:'실손 말고 진단비·수술비 보험도 갖고 계신가요?', o:['예','아니요','잘 모르겠어요'] }
+];
+const RESULTS = {
+  urgent: { tag:'점검 시급형', title:'지금 확인이 필요한 항목이 있습니다',
+    desc:'아래 항목은 그대로 두면 보험료나 보험금에서 손해가 생길 수 있습니다.' },
+  check:  { tag:'보장 확인형', title:'보장 내용 확인을 권해드립니다',
+    desc:'실손은 가입 시기에 따라 자기부담금과 비급여 보장이 다릅니다. 내 보장을 정확히 알아두세요.' },
+  good:   { tag:'양호형', title:'현재는 큰 문제가 없어 보입니다',
+    desc:'갱신·재가입 시점이나 보험료가 오를 때 한 번 더 점검해 보시길 권해드립니다.' }
+};
+const ans = {}; let i = 0; let resultKey = '';
+const $ = id => document.getElementById(id);
+
+function render(){
+  const q = QS[i];
+  $('np-prog').style.width = (i / QS.length * 100) + '%';
+  $('np-step').textContent = `질문 ${i+1} / ${QS.length}`;
+  $('np-q').textContent = q.q;
+  $('np-opts').innerHTML = '';
+  q.o.forEach(t => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'np-opt'; b.textContent = t;
+    b.onclick = () => { ans[q.k] = t; i++; i < QS.length ? render() : showResult(); };
+    $('np-opts').appendChild(b);
+  });
+  $('np-back').hidden = i === 0;
+}
+function showResult(){
+  const notes = [];
+  if (ans.q2 === '예') notes.push('단체·개인 실손 중복: 실제 의료비를 나눠 보상(비례보상)하므로 보험료만 이중으로 낼 수 있습니다.');
+  if (ans.q3 === '예') notes.push('미청구 진료비: 진료일로부터 3년 이내라면 지금도 청구할 수 있습니다.');
+  if (ans.q1 === '잘 모르겠어요') notes.push('가입 시기 확인: 세대에 따라 자기부담금과 보장 범위가 다릅니다.');
+  if (ans.q4 === '자주 받아요') notes.push('비급여 진료: 가입 시기에 따라 보장 한도와 자기부담률이 다릅니다.');
+  if (ans.q5 === '예') notes.push('보험료 인상: 유지·전환 시 보장 차이를 비교해 볼 필요가 있습니다.');
+  if (ans.q6 === '아니요') notes.push('진단비·수술비: 실손으로 채워지지 않는 큰 비용에 대한 대비를 확인해 보세요.');
+  resultKey = (ans.q2 === '예' || ans.q3 === '예') ? 'urgent' : (notes.length ? 'check' : 'good');
+  const r = RESULTS[resultKey];
+  $('np-rtag').textContent = r.tag; $('np-rtitle').textContent = r.title; $('np-rdesc').textContent = r.desc;
+  $('np-rlist').innerHTML = '';
+  notes.forEach(n => { const li = document.createElement('li'); li.textContent = n; $('np-rlist').appendChild(li); });
+  $('np-quiz').hidden = true; $('np-result').hidden = false;
+}
+$('np-back').onclick = () => { if (i > 0) { i--; render(); } };
+$('np-retry').onclick = () => { i = 0; for (const k in ans) delete ans[k]; $('np-result').hidden = true; $('np-quiz').hidden = false; render(); };
+$('np-phone').addEventListener('input', e => {
+  const d = e.target.value.replace(/\D/g,'').slice(0,11);
+  e.target.value = d.length > 7 ? `${d.slice(0,3)}-${d.slice(3,d.length-4)}-${d.slice(-4)}` : d.length > 3 ? `${d.slice(0,3)}-${d.slice(3)}` : d;
+});
+$('np-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = $('np-name').value.trim(), phone = $('np-phone').value.trim();
+  if (!name) return $('np-err').textContent = '이름을 입력해 주세요.';
+  if (!/^01[016789]-?\d{3,4}-?\d{4}$/.test(phone)) return $('np-err').textContent = '연락처를 정확히 입력해 주세요.';
+  if (!$('np-consent').checked) return $('np-err').textContent = '개인정보 수집·이용에 동의해 주세요.';
+  if (!SCRIPT_URL) return $('np-err').textContent = '시트 연결 주소(SCRIPT_URL)가 아직 입력되지 않았습니다.';
+  $('np-err').textContent = ''; $('np-submit').disabled = true; $('np-submit').textContent = '접수 중...';
+  const payload = { ...ans, name, phone, time: $('np-time').value, result: RESULTS[resultKey].tag,
+    consent: '동의', website: $('np-form').website.value };
+  try {
+    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
+    $('np-result').hidden = true; $('np-done').hidden = false;
+  } catch (err) {
+    $('np-err').textContent = '접수 중 문제가 생겼습니다. 010-6484-9690으로 연락 주세요.';
+    $('np-submit').disabled = false; $('np-submit').textContent = '상세 점검 신청하기';
+  }
+});
+render();
+</script>
+</body>
+</html>
