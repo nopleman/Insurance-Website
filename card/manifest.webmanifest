@@ -1,0 +1,17 @@
+{
+  "name": "노플맨 주영선 디지털 명함",
+  "short_name": "노플맨 명함",
+  "description": "보험 상담 · 법률상담 연계 · 디지털 명함 제작 · 태양광 임대상담",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7F3EA",
+  "theme_color": "#16203A",
+  "lang": "ko",
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
