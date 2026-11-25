@@ -334,7 +334,7 @@ document.querySelectorAll('.copy').forEach(btn=>{
 
 <script>
 (function(){
-  var FEED="https://feeds.behold.so/o5V2OpCj6azXgT29BkBB"; // Behold JSON 피드 주소
+  var FEED="https://feeds.behold.so/SJQDQtq4bm3QxDCWMGs0"; // Behold JSON 피드 주소
   var g=document.getElementById('igGrid'); if(!g||!FEED) return;
   function draw(posts){
     posts=(posts||[]).slice(0,3); if(!posts.length) return;
@@ -350,7 +350,7 @@ document.querySelectorAll('.copy').forEach(btn=>{
   }
   function user(u){ if(!u) return; var b=document.getElementById('igUser'); if(b) b.textContent='@'+u;
     document.querySelectorAll('.ig a,.ig-fol,.ig-more').forEach(function(a){ if(/instagram\.com\/[^\/]+\/?$/.test(a.href)) a.href='https://www.instagram.com/'+u+'/'; }); }
-  var K='ig_feed_v1', c=null;
+  var K='ig_feed_v2', c=null;
   try{c=JSON.parse(localStorage.getItem(K)||'null')}catch(e){}
   if(c&&c.p){ draw(c.p); user(c.u); }
   if(c&&Date.now()-c.t<3*3600e3) return;
