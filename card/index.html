@@ -183,6 +183,30 @@ fieldset.fld{border:0;margin:0;padding:0}
     </div>
   </section>
 
+  <style>
+.ig-head{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+.ig-av{width:44px;height:44px;border-radius:50%;padding:2px;background:conic-gradient(from 200deg,#F5C56A,#E1306C,#833AB4,#F5C56A)}
+.ig-av span{display:flex;width:100%;height:100%;border-radius:50%;background:var(--card);border:2px solid var(--card);align-items:center;justify-content:center;color:var(--accent)}
+.ig-id{flex:1;min-width:0}.ig-id b{display:block;font-size:15px;color:var(--ink)}.ig-id small{color:var(--muted);font-size:12.5px}
+.ig-fol{flex:none;font-weight:700;font-size:13px;color:#fff;background:linear-gradient(90deg,#833AB4,#E1306C 60%,#F5A04A);padding:8px 14px;border-radius:999px;text-decoration:none}
+.ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ig-grid a{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1.5px dashed var(--accent);background:repeating-linear-gradient(135deg,var(--accent-soft) 0 10px,var(--mat) 10px 20px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:var(--accent);font-size:12px;font-weight:700;text-decoration:none}
+.ig-grid a i{font-style:normal;font-size:20px}
+.ig-grid a.on{border:0;background:#ddd}.ig-grid a.on img{width:100%;height:100%;object-fit:cover;display:block}.ig-grid a.on .vd{position:absolute;top:6px;right:6px;width:18px;height:18px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.ig-more{display:block;text-align:center;margin-top:12px;font-size:13.5px;color:var(--accent);font-weight:700;text-decoration:none}
+</style><section class="section ig" aria-labelledby="ig-h">
+    <h2 class="label" id="ig-h">INSTAGRAM</h2>
+    <div class="ig-head"><div class="ig-av"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor"/></svg></span></div>
+      <div class="ig-id"><b id="igUser">@memto918</b><small>최신 게시물</small></div>
+      <a class="ig-fol" href="https://www.instagram.com/memto918/" target="_blank" rel="noopener">팔로우</a></div>
+    <div class="ig-grid" id="igGrid">
+      <a href="https://www.instagram.com/memto918/" target="_blank" rel="noopener"><i>①</i>최신 게시물</a>
+      <a href="https://www.instagram.com/memto918/" target="_blank" rel="noopener"><i>②</i>게시물</a>
+      <a href="https://www.instagram.com/memto918/" target="_blank" rel="noopener"><i>③</i>게시물</a>
+    </div>
+    <a class="ig-more" href="https://www.instagram.com/memto918/" target="_blank" rel="noopener">인스타그램에서 더 보기 ›</a>
+  </section>
+
   <section class="section" aria-labelledby="ct-h">
     <h2 class="label" id="ct-h">CONTACT</h2>
     <div class="rows">
@@ -308,5 +332,32 @@ document.querySelectorAll('.copy').forEach(btn=>{
 })();
 </script>
 
+<script>
+(function(){
+  var FEED="https://feeds.behold.so/o5V2OpCj6azXgT29BkBB"; // Behold JSON 피드 주소
+  var g=document.getElementById('igGrid'); if(!g||!FEED) return;
+  function draw(posts){
+    posts=(posts||[]).slice(0,3); if(!posts.length) return;
+    var a=g.querySelectorAll('a');
+    posts.forEach(function(p,i){
+      var el=a[i]; if(!el) return;
+      var src=(p.sizes&&p.sizes.medium&&p.sizes.medium.mediaUrl)||(p.sizes&&p.sizes.small&&p.sizes.small.mediaUrl)||p.thumbnailUrl||p.mediaUrl;
+      if(!src) return;
+      el.className='on'; el.href=p.permalink||el.href;
+      el.innerHTML='<img loading="lazy" alt="" src="'+src+'">'+(p.mediaType==='VIDEO'?'<svg class="vd" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>':'');
+      var cap=(p.prunedCaption||p.caption||'').slice(0,80); el.querySelector('img').alt=cap||'인스타그램 게시물';
+    });
+  }
+  function user(u){ if(!u) return; var b=document.getElementById('igUser'); if(b) b.textContent='@'+u;
+    document.querySelectorAll('.ig a,.ig-fol,.ig-more').forEach(function(a){ if(/instagram\.com\/[^\/]+\/?$/.test(a.href)) a.href='https://www.instagram.com/'+u+'/'; }); }
+  var K='ig_feed_v1', c=null;
+  try{c=JSON.parse(localStorage.getItem(K)||'null')}catch(e){}
+  if(c&&c.p){ draw(c.p); user(c.u); }
+  if(c&&Date.now()-c.t<3*3600e3) return;
+  fetch(FEED).then(function(r){return r.json()}).then(function(d){
+    var p=d.posts||d; draw(p); user(d.username); try{localStorage.setItem(K,JSON.stringify({t:Date.now(),u:d.username,p:p.slice(0,3)}))}catch(e){}
+  }).catch(function(){});
+})();
+</script>
 </body>
 </html><script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="9cace130-3caa-41fe-ae2a-41e1b0477049" data-app-host="app.netlify.com" data-account-tier="personal"></script>
