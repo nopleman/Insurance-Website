@@ -192,6 +192,39 @@ fieldset.fld{border:0;margin:0;padding:0}
     <ul class="nsvc"><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.3-7 10-4-1.7-7-5.4-7-10V6l7-3z"/><path d="M8.6 12.2l2.3 2.3 4.6-4.8"/></svg></span><div><b>보험 상담</b><small>실손·건강보험 점검부터 청구까지</small></div></li><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M7 20h10M5 7h14"/><path d="M5 7l-2.6 6h5.2L5 7zM19 7l-2.6 6h5.2L19 7z"/><path d="M2.4 13a2.6 2.2 0 0 0 5.2 0M16.4 13a2.6 2.2 0 0 0 5.2 0"/></svg></span><div><b>법률상담 연계</b><small>회생·파산 전담 법무법인과 연결</small></div></li><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.4"/><path d="M10.5 18.5h3"/><circle cx="12" cy="9" r="2.2"/><path d="M8.8 14c.7-1.4 1.8-2 3.2-2s2.5.6 3.2 2"/></svg></span><div><b>디지털 명함 제작</b><small>링크 하나로 나를 소개하는 명함</small></div></li><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.4"/><path d="M5 9.5h11.5l3 8H2z"/><path d="M10.7 9.5l-.4 8M3.4 13.5h14.6"/><path d="M10.5 17.5v3.5M7 21h7"/></svg></span><div><b>태양광 임대상담</b><small>지붕·유휴부지 임대 수익 상담</small></div></li></ul>
   </section>
 
+  <style>
+.vid{margin:24px 28px 0;padding-top:20px;border-top:1px solid var(--line)}
+.vid .label{margin:0 0 10px}
+.v-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#16203A;box-shadow:0 6px 18px rgba(22,32,58,.18)}
+.vid[data-ratio="9:16"] .v-frame{aspect-ratio:9/16;max-height:72vh;margin:0 auto;width:auto;height:72vh;max-width:100%}
+.v-frame iframe,.v-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover;background:#000}
+.v-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#E8C46A;font-size:13px;font-weight:700;border:1.5px dashed rgba(232,196,106,.6);border-radius:14px}
+.v-ph i{width:54px;height:54px;border-radius:50%;background:rgba(232,196,106,.15);border:1.5px solid #E8C46A;display:flex;align-items:center;justify-content:center;font-style:normal}
+.v-title{margin:14px 0 4px;font-size:17px;font-weight:700;color:var(--ink);line-height:1.35}
+.v-desc{margin:0;font-size:14px;color:var(--muted);line-height:1.6;white-space:pre-line}
+.v-link{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:9px 16px;border-radius:999px;background:var(--accent);color:#fff;font-size:14px;font-weight:700;text-decoration:none}
+.v-link[hidden]{display:none}
+.v-frame.ig{aspect-ratio:auto;height:auto;background:#fff;box-shadow:0 6px 18px rgba(22,32,58,.12)}
+.v-frame.ig iframe{position:static;display:block;width:100%;height:560px;background:#fff}
+</style>
+  <section class="vid" id="vidBox" aria-labelledby="vid-h"
+    data-src="https://www.instagram.com/reel/DgL8vf1vexn/"
+    data-ratio="16:9"
+    data-poster="">
+    <h2 class="label" id="vid-h">VIDEO</h2>
+    <div class="v-frame" id="vFrame"><div class="v-ph"><i><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>동영상이 들어갈 자리</div></div>
+    <h3 class="v-title">태양광 지붕 임대, 3분이면 이해됩니다.</h3>
+    <p class="v-desc">비어 있는 지붕을 빌려주고 임대 수익을 받는 구조와, 시작 전에 꼭 확인할 점을 3분 영상으로 정리했습니다. 우리 집·건물 지붕도 가능한지 무료로 상담해 드립니다.</p>
+    <a class="v-link" id="vLink" href="https://forms.gle/kk5FaKQmJopDDCW87" target="_blank" rel="noopener">무료상담 신청 ›</a>
+  </section>
+<script>(function(){var b=document.getElementById('vidBox');if(!b)return;var src=(b.dataset.src||'').trim();if(!src)return;
+var f=document.getElementById('vFrame'),y=src.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);
+var ig=src.match(/instagram\.com\/(?:reel|p|tv)\/([\w-]+)/);
+if(ig){f.classList.add('ig');f.innerHTML='<iframe id="vIg" src="https://www.instagram.com/reel/'+ig[1]+'/embed/" title="인스타그램 릴스" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" loading="lazy"></iframe>';
+addEventListener('message',function(e){if(!/instagram\.com$/.test(new URL(e.origin).hostname))return;try{var d=typeof e.data==='string'?JSON.parse(e.data):e.data;if(d&&d.type==='MEASURE'&&d.details&&d.details.height){document.getElementById('vIg').style.height=d.details.height+'px'}}catch(x){}});return;}
+if(y){f.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+y[1]+'?rel=0&playsinline=1" title="동영상" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>';}
+else{var v=document.createElement('video');v.src=src;v.controls=true;v.playsInline=true;v.preload='metadata';if(b.dataset.poster)v.poster=b.dataset.poster;f.innerHTML='';f.appendChild(v);}})();</script>
+
   <p class="intro">보험은 제대로 아는 것부터, 빚 문제는 함께 길을 찾는 것부터 시작합니다. 작은 고민이라도 편하게 문의 주십시오.</p>
 
   <section class="section" aria-labelledby="svc-h">
