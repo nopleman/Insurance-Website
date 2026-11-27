@@ -42,10 +42,11 @@ details{margin-top:8px;font-size:12px;color:rgba(245,241,230,.6);line-height:1.6
 </style>
 </head>
 <body>
+<form name="alimcheck" data-netlify="true" netlify-honeypot="website" hidden><input name="name"><input name="phone"><input name="time"><input name="result"><input name="Q1 3개월 내 진찰·치료"><input name="Q2 3개월 내 상시 투약"><input name="Q3 1년 내 재검사"><input name="Q4 5년 내 입원·수술·장기치료"><input name="Q5 5년 내 10대 질병"><input name="Q6 임신"><input name="Q7 장애·기능 이상"><input name="consent"><input name="health_consent"><input name="website"></form>
 <div class="np-box" id="np-root">
   <a href="./" style="display:inline-block;margin-bottom:14px;color:rgba(245,241,230,.78);font-size:14px;text-decoration:none">← 노플맨 주영선 홈으로</a>
   <div class="np-head"><b>계약 전 알릴의무 셀프 체크</b><span class="np-badge">무료</span></div>
-  <p id="np-intro" style="margin:6px 0 0;font-size:14px;line-height:1.6;color:rgba(245,241,230,.78)">보험 가입 전, 청약서에 무엇을 알려야 하는지 7가지 질문으로 미리 확인해 보세요. 답변은 이 화면에서만 쓰이고 저장되지 않습니다.</p>
+  <p id="np-intro" style="margin:6px 0 0;font-size:14px;line-height:1.6;color:rgba(245,241,230,.78)">보험 가입 전, 청약서에 무엇을 알려야 하는지 7가지 질문으로 미리 확인해 보세요. 상담을 신청하시면 동의를 받아 답변이 함께 전달됩니다.</p>
 
   <!-- 질문 화면 -->
   <section id="np-quiz">
@@ -77,10 +78,17 @@ details{margin-top:8px;font-size:12px;color:rgba(245,241,230,.6);line-height:1.6
       <input class="np-hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label class="np-agree"><input type="checkbox" id="np-consent"><span>[필수] 개인정보 수집·이용에 동의합니다.</span></label>
       <details><summary>자세히 보기</summary>
-        수집 항목: 이름, 연락처, 상담 가능 시간 (건강 관련 응답은 저장·전송하지 않습니다)<br>
+        수집 항목: 이름, 연락처, 상담 가능 시간<br>
         이용 목적: 보험 상담 연락 및 보장 점검 안내<br>
         보유 기간: [상담 종료 후 OO년 — 소속 회사 기준으로 수정]<br>
         동의를 거부할 수 있으며, 거부 시 상담 신청이 제한됩니다.
+      </details>
+      <label class="np-agree"><input type="checkbox" id="np-hconsent"><span>[필수] 건강 관련 정보(민감정보) 수집·이용에 별도로 동의합니다.</span></label>
+      <details><summary>자세히 보기</summary>
+        수집 항목: 셀프 체크 응답(최근 진료·투약·입원·수술·질병 이력, 임신 여부, 장애 여부)과 결과 유형<br>
+        이용 목적: 보험 가입 전 알릴 사항 정리 및 상담<br>
+        보유 기간: [상담 종료 후 OO년 — 소속 회사 기준으로 수정]<br>
+        동의를 거부할 수 있으며, 거부 시 응답을 포함한 상담 신청이 제한됩니다. 이 경우 010-6484-9690으로 전화 상담을 이용해 주세요.
       </details>
       <button type="submit" class="np-cta" id="np-submit">가입 전 상담 신청하기</button>
       <div class="np-err" id="np-err" role="alert"></div>
@@ -166,12 +174,15 @@ $('np-form').addEventListener('submit', async e => {
   if (!name) return $('np-err').textContent = '이름을 입력해 주세요.';
   if (!/^01[016789]-?\d{3,4}-?\d{4}$/.test(phone)) return $('np-err').textContent = '연락처를 정확히 입력해 주세요.';
   if (!$('np-consent').checked) return $('np-err').textContent = '개인정보 수집·이용에 동의해 주세요.';
-  if (!SCRIPT_URL) return $('np-err').textContent = '시트 연결 주소(SCRIPT_URL)가 아직 입력되지 않았습니다.';
+  if (!$('np-hconsent').checked) return $('np-err').textContent = '건강 관련 정보 수집·이용에 동의해 주세요.';
   $('np-err').textContent = ''; $('np-submit').disabled = true; $('np-submit').textContent = '접수 중...';
-  const payload = { type:'알릴의무 셀프 체크', name, phone, time: $('np-time').value, result: RESULTS[resultKey].tag,
-    consent: '동의', website: $('np-form').website.value };
+  const L = ["Q1 3개월 내 진찰·치료", "Q2 3개월 내 상시 투약", "Q3 1년 내 재검사", "Q4 5년 내 입원·수술·장기치료", "Q5 5년 내 10대 질병", "Q6 임신", "Q7 장애·기능 이상"];
+  const data = { 'form-name':'alimcheck', name, phone, time: $('np-time').value, result: RESULTS[resultKey].tag,
+    consent:'동의', health_consent:'동의', website: $('np-form').website.value };
+  QS.forEach((q, n) => { data[L[n]] = ans[q.k] || ''; });
   try {
-    await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
+    const r = await fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: new URLSearchParams(data).toString() });
+    if (!r.ok) throw new Error(r.status);
     $('np-result').hidden = true; $('np-done').hidden = false;
   } catch (err) {
     $('np-err').textContent = '접수 중 문제가 생겼습니다. 010-6484-9690으로 연락 주세요.';
